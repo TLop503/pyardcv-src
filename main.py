@@ -1,12 +1,26 @@
 import cv2
+import pyautogui
+import time
 
 # Load the cascade
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 # To capture video from webcam. 
 cap = cv2.VideoCapture(0)
-# To use a video file as input 
-# cap = cv2.VideoCapture('filename.mp4')
+
+def swap_window():
+    pyautogui.moveTo(2780, 1660)
+    pyautogui.click()
+
+def export_text(text):
+    #reconfigure as needed
+    pyautogui.typewrite(text)
+    pyautogui.press('enter')
+
+
+last = "cent"
+
+swap_window()
 
 while True:
     # Read the frame
@@ -19,10 +33,15 @@ while True:
     for (x, y, w, h) in faces:
         h = 3 * h
         cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
-        if (x > 350): #right of cam
-            print("right")
-        elif (x < 250): #left of cam
-            print("left")
+        if ((x > 400) and last != "right"): #right of cam
+            export_text("right")
+            last = "right"
+        elif ((x < 200)and last != "left"): #left of cam
+            export_text("left")
+            last = "left"
+        else:
+            export_text("cent")
+            last = "cent"
             
 
     # Display
@@ -31,5 +50,6 @@ while True:
     k = cv2.waitKey(30) & 0xff
     if k==27:
         break
+    
 # Release the VideoCapture object
 cap.release()
