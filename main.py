@@ -17,8 +17,14 @@ while True:
     faces = face_cascade.detectMultiScale(gray, 1.1, 4)
     # Draw the rectangle around each face
     for (x, y, w, h) in faces:
-        
+        h = 3 * h
         cv2.rectangle(img, (x, y), (x+w, y+h), (0, 0, 255), 2)
+        if (x > 350): #right of cam
+            print("right")
+        elif (x < 250): #left of cam
+            print("left")
+            
+
     # Display
     cv2.imshow('img', img)
     # Stop if escape key is pressed
